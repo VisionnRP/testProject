@@ -4,10 +4,10 @@ import { map, filter, tap } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoginServiceService } from '../logins/login-service.service';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, pipe } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { selectPhonebookList } from '../store/phonebook.reducer';
-import { LoadPhonebook } from '../store/phonebook.actions';
+import { load } from '../store/phonebook.actions';
+import { selectVisible } from '../store/phonebook.reducer';
 
 
 interface Item {
@@ -31,16 +31,17 @@ interface Item {
 })
 export class PhonebookComponent implements OnInit {
 
-  phonebook$: Observable<Phonebook[]> = this.store.pipe(select(selectPhonebookList));
-
+  phonebook$: Observable<Phonebook[]>;
+  phonebook;
 
   constructor(private service: FirebaseService, private store: Store<Phonebook[]>) {
 
     }
 
   ngOnInit() {
-    this.store.dispatch(new LoadPhonebook());
-    this.phonebook$.subscribe(data => console.log(data));
+    this.store.dispatch(load(this.phonebook));
+    this.phonebook$ =  this.store.select(selectVisible);
+    
     // const vm$ = this.store.select(state => state)
     // this.itemCollection = this.afs.collection('phonebook');
     // this.items = this.itemCollection.valueChanges();

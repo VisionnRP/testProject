@@ -22,7 +22,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { PhonebookEffects } from './store/phonebook.effects';
-import { phonebookReducer } from '../app/store/phonebook.reducer';
+import { reducer } from '../app/store/phonebook.reducer';
 
 
 
@@ -54,7 +54,7 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    StoreModule.forRoot(phonebookReducer),
+    StoreModule.forRoot(reducer),
     EffectsModule.forRoot([PhonebookEffects]),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     StoreDevtoolsModule.instrument({

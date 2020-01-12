@@ -15,11 +15,10 @@ import { FirebaseService } from '../firebase/firebase.service';
 export class PhonebookEffects {
     @Effect()
     loadArticles$ = this.actions$.pipe(
-      ofType(PhonebookActions.PhonebookActions.LoadPhonebook),
+      ofType(PhonebookActions.load),
       mergeMap(() =>
         this.firebaseService.getAll().pipe(
-          map(phonebook => new PhonebookActions.PhonebookLoadedSuccess({ phonebook })),
-          catchError(() => of(new PhonebookActions.PhonebookLoadedError()))
+          map(phonebook => PhonebookActions.loadsucces({phonebook}))
         )
       )
     )
