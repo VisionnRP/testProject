@@ -22,7 +22,7 @@ export class PhonebookEffects {
         )
       )
     )
-  
+
     constructor(
       private actions$: Actions,
       private firebaseService: FirebaseService

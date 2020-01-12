@@ -6,7 +6,7 @@ import { LoginServiceService } from '../logins/login-service.service';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { Observable, Subscription, pipe } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { load } from '../store/phonebook.actions';
+import { load, loadsucces } from '../store/phonebook.actions';
 import { selectVisible } from '../store/phonebook.reducer';
 
 
@@ -31,17 +31,16 @@ interface Item {
 })
 export class PhonebookComponent implements OnInit {
 
-  phonebook$: Observable<Phonebook[]>;
+  phonebook$: Observable<Phonebook[]> = this.store.select(state => state.phone);
   phonebook;
 
-  constructor(private service: FirebaseService, private store: Store<Phonebook[]>) {
+  constructor(private service: FirebaseService, private store: Store<{phone: Phonebook[]}>) {
 
     }
 
   ngOnInit() {
     this.store.dispatch(load(this.phonebook));
-    this.phonebook$ =  this.store.select(selectVisible);
-    
+    this.phonebook$.subscribe(data => console.log(data));
     // const vm$ = this.store.select(state => state)
     // this.itemCollection = this.afs.collection('phonebook');
     // this.items = this.itemCollection.valueChanges();
