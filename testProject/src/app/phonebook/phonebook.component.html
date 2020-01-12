@@ -1,0 +1,62 @@
+<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
+<div class="container" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+	<form [formGroup]="service.form" (click)="onSubmit($event)">
+		<mat-card>
+			<mat-card-header>
+				<mat-card-title>
+					Todo List
+				</mat-card-title>
+				<mat-card-subtitle>
+					You can manage your todo list here
+				</mat-card-subtitle>
+			</mat-card-header>
+			<mat-card-content>
+
+				<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+          <input formControlName="key" type="hidden">
+					<mat-form-field>
+						<input formControlName="email" #input matInput placeholder="email" value="">
+          </mat-form-field>
+          <mat-form-field>
+						<input formControlName="phoneNumber" #input matInput placeholder="phone" value="">
+          </mat-form-field>
+           <mat-form-field >
+          <input formControlName="fullName" #input matInput placeholder="full name" value="">
+           </mat-form-field>
+        </div>
+  </mat-card-content>
+  <mat-card-actions>
+      <button type="reset" (click)="service.resetForm()" mat-raised-button>CANCEL</button>
+      <button type="submit" mat-raised-button color="primary">{{ service.addButton }}</button>
+  </mat-card-actions>
+</mat-card>
+  </form>
+
+<br>
+
+<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+  <mat-card *ngFor="let phonebook of phonebookList">
+    <mat-card-header>
+      <mat-card-title>{{ phonebook.fullName }}</mat-card-title>
+      <mat-card-subtitle>{{ phonebook.phoneNumber }}</mat-card-subtitle>
+      {{phonebook.email}}
+    </mat-card-header>
+      <mat-card-actions>
+        <!-- <button type="button" mat-raised-button color="primary" (click)="update(phonebook)">EDIT</button> -->
+        <button type="button" mat-raised-button color="warn" (click)="delete(phonebook.key)">DEL</button>
+    </mat-card-actions>
+  </mat-card>
+  </div>
+</div>
+
+<div *ngFor="let pizza of pizzas | async">
+
+  <h4>Pizza ID: {{ pizza.id }} </h4>
+
+  <p>{{ pizza.status }}</p>
+  
+  <button (click)="updatePizza(pizza.id, 'delivered')">
+    Update Status to Delivered
+  </button> 
+
+</div>
