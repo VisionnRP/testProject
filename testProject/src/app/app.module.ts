@@ -17,14 +17,31 @@ import { FirebaseService } from '../app/firebase/firebase.service';
 import { PhonebookComponent } from './phonebook/phonebook.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
+import { LoginComponent } from './login/login.component';
+import { RouterModule, Routes } from '@angular/router';
+import { EffectsModule } from '@ngrx/effects';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { PhonebookEffects } from './store/phonebook.effects';
+import { phonebookReducer } from '../app/store/phonebook.reducer';
 
+
+
+
+
+const appRoutes: Routes = [
+  { path: 'login',      component: LoginComponent },
+  { path: 'phonebook', component: PhonebookComponent },
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    PhonebookComponent
+    PhonebookComponent,
+    LoginComponent,
   ],
   imports: [
+    RouterModule.forRoot(
+      appRoutes),
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -35,14 +52,17 @@ import { StoreModule } from '@ngrx/store';
     MatInputModule,
     MatCardModule,
     FlexLayoutModule,
+    AngularFirestoreModule,
     AngularFireDatabaseModule,
+    StoreModule.forRoot(phonebookReducer),
+    EffectsModule.forRoot([PhonebookEffects]),
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
     }),
   ],
+  exports: [RouterModule],
   providers: [FirebaseService],
   bootstrap: [AppComponent]
 })

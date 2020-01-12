@@ -1,0 +1,25 @@
+<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
+<div class="container" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+	<form [formGroup]="emailForm">
+		<mat-card>
+			<mat-card-header>
+				<mat-card-title>
+					LOGIN
+				</mat-card-title>
+				<mat-card-subtitle>
+					Please enter your email
+				</mat-card-subtitle>
+			</mat-card-header>
+			<mat-card-content>
+
+				<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+					<mat-form-field>
+						<input  id="email" formControlName="email" #input matInput placeholder="email" value="">
+          </mat-form-field>
+        </div>
+  </mat-card-content>
+  <mat-card-actions>	
+      <button (click)="onSubmit()" [disabled]=emailForm.invalid>Login</button>
+  </mat-card-actions>
+</mat-card>
+  </form>

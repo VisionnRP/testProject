@@ -35,7 +35,7 @@
 <br>
 
 <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-  <mat-card *ngFor="let phonebook of phonebookList">
+  <mat-card *ngFor="let phonebook of phonebook$ | async">
     <mat-card-header>
       <mat-card-title>{{ phonebook.fullName }}</mat-card-title>
       <mat-card-subtitle>{{ phonebook.phoneNumber }}</mat-card-subtitle>
@@ -47,16 +47,4 @@
     </mat-card-actions>
   </mat-card>
   </div>
-</div>
-
-<div *ngFor="let pizza of pizzas | async">
-
-  <h4>Pizza ID: {{ pizza.id }} </h4>
-
-  <p>{{ pizza.status }}</p>
-  
-  <button (click)="updatePizza(pizza.id, 'delivered')">
-    Update Status to Delivered
-  </button> 
-
 </div>

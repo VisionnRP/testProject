@@ -1,72 +1,39 @@
+import { createSelector } from '@ngrx/store';
+import { PhonebookUnion, PhonebookActions } from './phonebook.actions';
 
+import { createReducer, on } from '@ngrx/store';
 
+export interface PhonebookState {
+    list: Phonebook[];
+  }
+export const initialState: PhonebookState = {
+    list: []
+  };
 
-
-
-
-
-
-
-
-
-
-import * as actions from './phonebook.actions';
-import { EntityState, createEntityAdapter } from '@ngrx/entity';
-import { createFeatureSelector } from '@ngrx/store';
-
-// Main data interface
-
-// tslint:disable-next-line:class-name
-export interface phonebook {
-  id: any;
-  loading: boolean;
-  fullName: string;
-  phoneNumber: string;
-  email: string;
-  error?: string;
+export function phonebookReducer(
+  state = initialState,
+  action: PhonebookUnion
+) {
+  switch (action.type) {
+    case PhonebookActions.PhonebookLoadedSuccess:
+      return {
+        ...state,
+        list: action.payload.phonebook
+      };
+    case PhonebookActions.PhonebookLoadedError:
+      return {
+        ...state,
+        list: []
+      };
+    default:
+      return state;
+  }
 }
 
-// Entity adapter
-export const pizzaAdapter = createEntityAdapter<phonebook>();
-export interface State extends EntityState<phonebook> { }
+const selectPhonebook = (state) => state.list;
+console.log(selectPhonebook);
 
-
-export const initialState: State = pizzaAdapter.getInitialState();
-
-// Reducer
-
-export function phonebookReduser(
-    state: State = initialState,
-    action: actions.PizzaActions) {
-
-    switch (action.type) {
-
-        case actions.ADDED:
-            return pizzaAdapter.addOne(action.payload, state);
-
-        case actions.MODIFIED:
-            return pizzaAdapter.updateOne({
-                id: action.payload.id,
-                changes: action.payload
-            }, state);
-
-        case actions.REMOVED:
-            return pizzaAdapter.removeOne(action.payload.id, state);
-
-        default:
-            return state;
-    }
-
-}
-
-// Create the default selectors
-
-export const getPizzaState = createFeatureSelector<State>('phonebook');
-
-export const {
-    selectIds,
-    selectEntities,
-    selectAll,
-    selectTotal,
-  } = pizzaAdapter.getSelectors(getPizzaState);
-
+export const selectPhonebookList = createSelector(
+    selectPhonebook,
+  (state: PhonebookState) => state.list
+)

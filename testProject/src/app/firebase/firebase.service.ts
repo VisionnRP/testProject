@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { LoginServiceService } from '../logins/login-service.service';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+
 
 
 @Injectable({
@@ -8,9 +13,9 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 })
 export class FirebaseService {
 
-  constructor(private firebase: AngularFireDatabase) { }
-
-  phonebook: AngularFireList<any[]>;
+  constructor(private firebase: AngularFirestore, public authorizedEmail: LoginServiceService) { }
+  collection: AngularFirestoreCollection<Phonebook>;
+  phonebook$: Observable<Phonebook[]>;
   addButton = 'ADD';
   form: FormGroup = new FormGroup({
     key: new FormControl(),
@@ -21,25 +26,8 @@ export class FirebaseService {
 
 
   getAll() {
-    this.phonebook = this.firebase.list('phonebook');
-    return this.phonebook.snapshotChanges();
-  }
-  add(value: any) {
-    this.phonebook.push(value);
-    this.resetForm();
-  }
-
-  update(value: any) {
-    this.form.patchValue(value);
-    this.addButton = 'UPDATE';
-  }
-
-  delete(value) {
-    this.phonebook.remove(value);
-  }
-
-  resetForm() {
-    this.addButton = 'ADD';
-    this.form.reset();
+    this.collection = this.firebase.collection<Phonebook>('phonebook');
+    this.phonebook$ = this.collection.valueChanges();
+    return this.phonebook$;
   }
 }
