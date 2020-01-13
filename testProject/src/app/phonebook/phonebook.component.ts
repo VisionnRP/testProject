@@ -39,7 +39,7 @@ export class PhonebookComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.store.dispatch(load(this.phonebook));
+    this.store.dispatch(loadsucces());
     this.phonebook$.subscribe(data => console.log(data));
     // const vm$ = this.store.select(state => state)
     // this.itemCollection = this.afs.collection('phonebook');
