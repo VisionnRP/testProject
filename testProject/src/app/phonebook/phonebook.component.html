@@ -1,49 +1,50 @@
 <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
 <div class="container" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-	<form [formGroup]="service.form" (click)="onSubmit($event)">
+	<form autocomplete="off" [formGroup]="service.form" (click)="onSubmit($event)">
 		<mat-card>
 			<mat-card-header>
 				<mat-card-title>
-					Todo List
+					Phonebook list
 				</mat-card-title>
 				<mat-card-subtitle>
-					You can manage your todo list here
+					You cane update your list by this form
 				</mat-card-subtitle>
 			</mat-card-header>
 			<mat-card-content>
 
 				<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-          <input formControlName="key" type="hidden">
 					<mat-form-field>
-						<input formControlName="email" #input matInput placeholder="email" value="">
+						<input  formControlName="email"  matInput placeholder="email" value="">
           </mat-form-field>
           <mat-form-field>
-						<input formControlName="phoneNumber" #input matInput placeholder="phone" value="">
+						<input  formControlName="phone"  matInput placeholder="phone" value="">
           </mat-form-field>
            <mat-form-field >
-          <input formControlName="fullName" #input matInput placeholder="full name" value="">
+          <input  formControlName="fullname"  matInput placeholder="full name" value="">
            </mat-form-field>
         </div>
   </mat-card-content>
-  <mat-card-actions>
-      <button type="reset" (click)="service.resetForm()" mat-raised-button>CANCEL</button>
-      <button type="submit" mat-raised-button color="primary">{{ service.addButton }}</button>
-  </mat-card-actions>
-</mat-card>
+      <button *ngIf="!submitButtonBoolean" type="submit" mat-raised-button color="primary">Add</button>
+      <button *ngIf="submitButtonBoolean" type="submit" mat-raised-button color="primary">Update</button>
+    </mat-card>
   </form>
 
 <br>
 
 <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
   <mat-card *ngFor="let phonebook of phonebook$ | async">
-    <mat-card-header>
-      <mat-card-title>{{ phonebook.fullName }}</mat-card-title>
-      <mat-card-subtitle>{{ phonebook.phoneNumber }}</mat-card-subtitle>
-      {{phonebook.email}}
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" >
+      <mat-card-title>{{ phonebook['fullname'] }}</mat-card-title>
+      <mat-card-subtitle>{{ phonebook['phone'] }}</mat-card-subtitle>
+      {{phonebook['email']}}
+      <div>
+        <mat-icon *ngIf="phonebook['isSpecial']" class="mat-icon-settings">enhanced_encryption</mat-icon>
+      </div>
     </mat-card-header>
       <mat-card-actions>
-        <!-- <button type="button" mat-raised-button color="primary" (click)="update(phonebook)">EDIT</button> -->
-        <button type="button" mat-raised-button color="warn" (click)="delete(phonebook.key)">DEL</button>
+         <button type="button" mat-raised-button color="primary" (click)="updateButton(phonebook)">EDIT</button>
+        <button type="button" mat-raised-button color="warn" (click)="delele(phonebook)">DELETE</button>
+        <button type="button" mat-raised-button color="warn" (click)="updateSpecialPhoneNumber(phonebook)">SPECIAL</button>
     </mat-card-actions>
   </mat-card>
   </div>

@@ -1,28 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from '../firebase/firebase.service';
-import { map, filter, tap } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
-import { LoginServiceService } from '../logins/login-service.service';
-import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
+import * as action from '../store/phonebook.actions';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { selectPhonebookList } from '../store/phonebook.reducer';
-import { LoadPhonebook } from '../store/phonebook.actions';
-
-
-interface Item {
-  id: string;
-  email: string;
-  fullname: string;
-  phone: string;
-}
-
-// later
-// import * as actions from '../store/phonebook.actions';
-// import * as fromPizza from '../store/phonebook.reducer';
-// import * as fromRoot from '../store/phonebook.reducer';
-
-
+import {isLoadedPhonebook} from '../store/phonebook.selectors';
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-phonebook',
@@ -30,57 +12,50 @@ interface Item {
   styleUrls: ['./phonebook.component.scss']
 })
 export class PhonebookComponent implements OnInit {
-
-  phonebook$: Observable<Phonebook[]> = this.store.pipe(select(selectPhonebookList));
+  submitButtonBoolean;
+  phonebook$: Observable<Phonebook> = this.store.pipe(select(isLoadedPhonebook));
 
 
   constructor(private service: FirebaseService, private store: Store<Phonebook[]>) {
 
-    }
+  }
 
   ngOnInit() {
-    this.store.dispatch(new LoadPhonebook());
-    this.phonebook$.subscribe(data => console.log(data));
-    // const vm$ = this.store.select(state => state)
-    // this.itemCollection = this.afs.collection('phonebook');
-    // this.items = this.itemCollection.valueChanges();
-    // this.items.subscribe(data => console.log(data));
-    // if (this.ngEmail.emailRequired === undefined) {
-    //   this.routes.navigate([``]);
-    // }
-    //this.getAll();
+    this.store.dispatch(action.load());
   }
-  // onSubmit() {
-  //   if (this.service.form.valid) {
-  //     this.service.add(this.service.form.value);
-  //   }
-  // }
 
-  // getAll() {
-  //   this.service.getAll().pipe(
-  //     map(changes =>
-  //       changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
-  //     ),
-  //   ).subscribe(customers => {
-  //     this.phonebookList = customers;
-  //   });
-  // }
-  // delete(value) {
-  //   this.service.delete(value);
-  // }
-  // update(value) {
-  //   this.service.update(value);
-  // }
+  onSubmit(e) {
+    if (this.submitButtonBoolean) {
+      this.update(e);
+      this.submitButtonBoolean = false;
+    } else {
+      this.add(e);
+    }
+  }
+
+  add(e) {
+    if (this.service.form.valid) {
+      this.store.dispatch(action.addPhonebook({valueAdd: this.service.form.value}));
+      this.service.form.reset();
+    }
+  }
+  delele(value) {
+    this.store.dispatch(action.deletePhonebook({valueDelete: value}));
+  }
+
+  updateButton(value) {
+    this.submitButtonBoolean = true;
+    this.service.form.patchValue(value);
+  }
+
+  // todo update
+  update(e) {
+    if (this.service.form.valid) {
+      this.store.dispatch(action.updatePhonebook({valueUpdate: this.service.form.value}));
+      this.service.form.reset();
+    }
+  }
+  updateSpecialPhoneNumber(value: Phonebook) {
+    this.store.dispatch(action.updatePhonebook({valueUpdate: {...value, isSpecial: !value.isSpecial}}));
+  }
 }
-
-
-
- // x.forEach(element => {
-//   if (element[`phoneId`] === this.ngEmail.emailRequired[`key`] && element[`key`] !== this.ngEmail.emailRequired[`key`]) {
-//     this.phonebookList.push(element);
-//   }
-// });
-
-  // itemCollection: AngularFirestoreCollection<Item>;
-  // items: Observable<Item[]>;
-  // phonebookList;

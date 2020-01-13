@@ -1,32 +1,16 @@
-import { Action, createAction } from '@ngrx/store';
-
-export enum PhonebookActions {
-    LoadPhonebook = '[Phonebook Page] Load Phonebook',
-    PhonebookLoadedSuccess = '[Phonebook Page] Phonebook Loaded Success',
-    PhonebookLoadedError = '[Phonebook Page] Phonebook Loaded Error'
-  }
+import { Action, createAction, props } from '@ngrx/store';
 
 export const load = createAction('[Phonebook] load');
-export const loadsucces = createAction('[Phonebook] load success');
-export const loadfail = createAction('[Phonebook] load failed');
-export class LoadPhonebook implements Action {
-    readonly type = PhonebookActions.LoadPhonebook;
-  }
+export const loadsucces = createAction('[Phonebook] load success', props<{result: Phonebook}>());
+export const loadfail = createAction('[Phonebook] load failed', props<{error: any}>());
 
-export class PhonebookLoadedSuccess implements Action {
-    readonly type = PhonebookActions.PhonebookLoadedSuccess;
+export const addPhonebook = createAction( '[Phonebook] add Phonebook', props<{valueAdd: Phonebook}>());
+export const addPhonebookSuccess = createAction( '[Phonebook] add Phonebook Success', props<{ phonebook: Phonebook}>());
 
-    constructor(public payload: { phonebook: Phonebook[] }) {}
-  }
+export const deletePhonebook = createAction( '[Phonebook] delete Phonebook', props<{valueDelete: Phonebook}>());
+export const deletePhonebookSuccess = createAction( '[Phonebook] delete Phonebook Success', props<{ phonebook: Phonebook}>());
 
-export class PhonebookLoadedError implements Action {
-    readonly type = PhonebookActions.PhonebookLoadedError;
-  }
-
-export type PhonebookUnion =
-    | LoadPhonebook
-    | PhonebookLoadedSuccess
-    | PhonebookLoadedError;
-
+export const updatePhonebook = createAction( '[Phonebook] update Phonebook', props<{valueUpdate: Phonebook}>());
+export const updatePhonebookSuccess = createAction( '[Phonebook] update Phonebook Success', props<{ phonebook: Phonebook}>());
 
 

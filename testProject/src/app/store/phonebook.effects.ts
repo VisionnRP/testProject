@@ -1,29 +1,48 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Action } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
 import * as PhonebookActions from './phonebook.actions';
-import { AngularFireDatabase, PathReference } from 'angularfire2/database';
 
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
-import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
+import {mergeMap, map, tap} from 'rxjs/operators';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable()
 export class PhonebookEffects {
     @Effect()
     loadArticles$ = this.actions$.pipe(
-      ofType(PhonebookActions.PhonebookActions.LoadPhonebook),
+      ofType(PhonebookActions.load),
       mergeMap(() =>
         this.firebaseService.getAll().pipe(
-          map(phonebook => new PhonebookActions.PhonebookLoadedSuccess({ phonebook })),
-          catchError(() => of(new PhonebookActions.PhonebookLoadedError()))
+          map((results: Phonebook) => PhonebookActions.loadsucces({ result: results})),
         )
       )
-    )
-  
+    );
+
+    @Effect()
+    addPhonebook$ = this.actions$.pipe(
+      ofType(PhonebookActions.addPhonebook),
+      mergeMap((value) => this.firebaseService.add(value.valueAdd).pipe(
+        map((phonebooks: any) => PhonebookActions.addPhonebookSuccess({ phonebook: phonebooks}))
+      ))
+    );
+
+    @Effect()
+    deletePhonebook$ = this.actions$.pipe(
+      ofType(PhonebookActions.deletePhonebook),
+      mergeMap((value) => this.firebaseService.delete(value.valueDelete).pipe(
+        map((phonebooks: any) => PhonebookActions.deletePhonebookSuccess({ phonebook: phonebooks}))
+      ))
+    );
+
+    @Effect()
+    updatePhonebook$ = this.actions$.pipe(
+      ofType(PhonebookActions.updatePhonebook),
+      mergeMap((value) => this.firebaseService.update(value.valueUpdate).pipe(
+        map((phonebooks: any) => PhonebookActions.updatePhonebookSuccess({ phonebook: phonebooks}))
+      ))
+    );
+
     constructor(
       private actions$: Actions,
       private firebaseService: FirebaseService

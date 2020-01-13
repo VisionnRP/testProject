@@ -22,7 +22,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { PhonebookEffects } from './store/phonebook.effects';
-import { phonebookReducer } from '../app/store/phonebook.reducer';
+import {counterReducer, phonebookReducer} from '../app/store/phonebook.reducer';
+import {MatIconModule} from "@angular/material/icon";
 
 
 
@@ -54,13 +55,14 @@ const appRoutes: Routes = [
     FlexLayoutModule,
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    StoreModule.forRoot(phonebookReducer),
+    StoreModule.forRoot({test: counterReducer}),
     EffectsModule.forRoot([PhonebookEffects]),
     AngularFireModule.initializeApp(environment.firebaseConfig),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
     }),
+    MatIconModule,
   ],
   exports: [RouterModule],
   providers: [FirebaseService],
