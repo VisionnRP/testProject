@@ -38,7 +38,10 @@ export class PhonebookComponent implements OnInit {
       if (Array.isArray(data)) {
         const id = this.user[0].id;
         this.phonebook = data.filter(value => value.phoneId === id);
-      }
+       }
+        // else if (!(data instanceof Array)) {
+      //   console.log('ok');
+      // }
     })).subscribe();
   }
 
