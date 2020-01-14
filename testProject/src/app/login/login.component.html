@@ -14,12 +14,12 @@
 
 				<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
 					<mat-form-field>
-						<input  id="email" formControlName="email" #input matInput placeholder="email" value="">
+						<input formControlName="email" #input matInput placeholder="email" value="">
           </mat-form-field>
         </div>
   </mat-card-content>
-  <mat-card-actions>	
-      <button (click)="login()" [disabled]=emailForm.invalid>Login</button>
+  <mat-card-actions>
+      <button  mat-button color="red" (click)="login()" [disabled]=emailForm.invalid>Login</button>
   </mat-card-actions>
 </mat-card>
   </form>

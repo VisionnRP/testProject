@@ -6,4 +6,5 @@ interface Phonebook {
     phone: string;
     phoneId: string;
     isSpecial: boolean;
+    isDuplicate: boolean;
 }

@@ -23,7 +23,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { PhonebookEffects } from './store/phonebook.effects';
 import {counterReducer, phonebookReducer} from '../app/store/phonebook.reducer';
-import {MatIconModule} from "@angular/material/icon";
+import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 
@@ -44,8 +46,10 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes),
     AppRoutingModule,
+    MatSnackBarModule,
     BrowserModule,
     BrowserAnimationsModule,
+    ScrollingModule,
     FormsModule,
     ReactiveFormsModule,
     MatListModule,
@@ -63,6 +67,7 @@ const appRoutes: Routes = [
       logOnly: environment.production,
     }),
     MatIconModule,
+    ScrollingModule,
   ],
   exports: [RouterModule],
   providers: [FirebaseService],

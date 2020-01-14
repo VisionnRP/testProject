@@ -38,6 +38,9 @@ export class PhonebookEffects {
     @Effect()
     updatePhonebook$ = this.actions$.pipe(
       ofType(PhonebookActions.updatePhonebook),
+      tap(x => {
+        debugger
+      }),
       mergeMap((value) => this.firebaseService.update(value.valueUpdate).pipe(
         map((phonebooks: any) => PhonebookActions.updatePhonebookSuccess({ phonebook: phonebooks}))
       ))
@@ -47,9 +50,7 @@ export class PhonebookEffects {
     login$ = this.actions$.pipe(
       ofType(PhonebookActions.login),
       mergeMap((result) => this.firebaseService.getAll().pipe(
-        tap(data => {
-         data =  data.filter( ev => ev.email === result.loginValue);
-          console.log(data);}),
+        tap(data => data =  data.filter( ev => ev.email === result.loginValue)),
         map((users: any) => PhonebookActions.loginSuccess({ user: users.filter( ev => ev.email === result.loginValue)})),
       ))
     );

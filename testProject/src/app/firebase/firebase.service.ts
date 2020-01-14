@@ -16,13 +16,14 @@ export class FirebaseService {
 
   constructor(private store: Store<Phonebook[]>, private firebase: AngularFirestore, public fb: FormBuilder) { }
   user$: Observable<Phonebook> = this.store.pipe(select(isUser));
-  user;   
+  user;
 
   collection = this.firebase.collection('phonebook');
   form: FormGroup = new FormGroup({
     email: new FormControl(),
     phone: new FormControl('', Validators.required),
     fullname: new FormControl('', Validators.required)
+
   });
 
 
@@ -38,7 +39,7 @@ export class FirebaseService {
       });
     return  this.collection.valueChanges();
   }
- 
+
   delete(value: Phonebook): Observable<any> {
      this.collection.doc(value.id).delete();
      return  this.collection.valueChanges();

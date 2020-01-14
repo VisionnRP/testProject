@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
 <div class="container" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-	<form autocomplete="off" [formGroup]="service.form" (click)="onSubmit($event)">
+	<form [formGroup]="service.form">
 		<mat-card>
 			<mat-card-header>
 				<mat-card-title>
@@ -16,6 +16,7 @@
 					<mat-form-field>
 						<input  formControlName="email"  matInput placeholder="email" value="">
           </mat-form-field>
+
           <mat-form-field>
 						<input  formControlName="phone"  matInput placeholder="phone" value="">
           </mat-form-field>
@@ -24,15 +25,14 @@
            </mat-form-field>
         </div>
   </mat-card-content>
-      <button *ngIf="!submitButtonBoolean" type="submit" mat-raised-button color="primary">Add</button>
-      <button *ngIf="submitButtonBoolean" type="submit" mat-raised-button color="primary">Update</button>
+      <button *ngIf="!submitButtonBoolean"  (click)="onSubmit($event)"type="submit" mat-raised-button color="primary">Add</button>
+      <button *ngIf="submitButtonBoolean"  (click)="onSubmit($event)"  type="submit" mat-raised-button color="primary">Update</button>
     </mat-card>
   </form>
-
 <br>
 
-<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-  <mat-card *ngFor="let phonebook of phonebook$ | async">
+<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px"  class="list-container lg"  >
+  <mat-card *ngFor="let phonebook of phonebook">
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" >
       <mat-card-title>{{ phonebook['fullname'] }}</mat-card-title>
       <mat-card-subtitle>{{ phonebook['phone'] }}</mat-card-subtitle>
