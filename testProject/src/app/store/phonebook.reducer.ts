@@ -5,10 +5,15 @@ import { createReducer, on } from '@ngrx/store';
 
 export interface PhonebookState {
     list: Phonebook;
+    login: string;
+    user: Phonebook;
   }
 export const initialState: PhonebookState = {
-    list: null
+    list: null,
+    login: '',
+    user: null,
   };
+
 
 export const phonebookReducer = createReducer(
   initialState,
@@ -16,7 +21,7 @@ export const phonebookReducer = createReducer(
   on(actions.loadsucces, (state, action) => ({ ...state, list: action.result })),
   on(actions.loadfail, (state, action) => ({ ...state})),
 
-  on(actions.addPhonebook, (state, action) => ({ ...state, list: action.valueAdd })),
+  on(actions.addPhonebook, (state, action) => ({ ...state, list: action.valueAdd, user: action.idUser })),
   on(actions.addPhonebookSuccess, (state, action) => ({ ...state, list: action.phonebook })),
 
   on(actions.deletePhonebook, (state, action) => ({ ...state, list: action.valueDelete })),
@@ -24,6 +29,10 @@ export const phonebookReducer = createReducer(
 
   on(actions.updatePhonebook, (state, action) => ({ ...state, list: action.valueUpdate })),
   on(actions.deletePhonebookSuccess, (state, action) => ({ ...state, list: action.phonebook })),
+
+  on(actions.login, (state, action) => ({ ...state, login: action.loginValue })),
+  on(actions.loginSuccess, (state, action) => ({ ...state, user: action.user })),
+  on(actions.logout, (state, action) => ({ ...state, user: null })),
   );
 export function counterReducer(state, action) {
   return phonebookReducer(state, action);

@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FirebaseService } from '../firebase/firebase.service';
-import { map, tap } from 'rxjs/operators';
-import { LoginServiceService } from '../logins/login-service.service';
+import { map, filter, tap, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { isLoadedPhonebook, isUser } from '../store/phonebook.selectors';
+import * as action from '../store/phonebook.actions';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -13,9 +15,10 @@ import { LoginServiceService } from '../logins/login-service.service';
 })
 export class LoginComponent implements OnInit {
 
-  phonebookUsers;
+  user$: Observable<Phonebook> = this.store.pipe(select(isUser));
   emailForm: FormGroup;
-  constructor(private fb: FormBuilder, private route: Router, private firebase: FirebaseService, private ngEmail: LoginServiceService) { }
+
+  constructor(private fb: FormBuilder, private store: Store<Phonebook[]>, private route: Router ) { }
 
   form: FormGroup = new FormGroup({
     email: new FormControl(''),
@@ -27,19 +30,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // onSubmit(e) {
-  //   this.firebase.getAll().pipe(
-  //     map(changes =>
-  //       changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
-  //     ),
-  //     map(value => {
-  //      value.forEach(element => {
-  //       if (element[`email`] === this.emailForm.value.email) {
-  //         this.ngEmail.emailRequired = element;
-  //         this.route.navigate([`/phonebook`]);
-  //       }
-  //      });
-  //     })
-  //   ).subscribe();
-  // }
+  login(value: string) {
+    this.store.dispatch(action.login({loginValue: this.emailForm.value.email}));
+    this.route.navigate(['phonebook']);
+  }
 }

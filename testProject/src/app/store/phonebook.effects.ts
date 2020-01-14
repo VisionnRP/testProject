@@ -4,7 +4,7 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import * as PhonebookActions from './phonebook.actions';
 
 
-import {mergeMap, map, tap} from 'rxjs/operators';
+import {mergeMap, map, tap, filter} from 'rxjs/operators';
 import { FirebaseService } from '../firebase/firebase.service';
 
 @Injectable()
@@ -22,7 +22,7 @@ export class PhonebookEffects {
     @Effect()
     addPhonebook$ = this.actions$.pipe(
       ofType(PhonebookActions.addPhonebook),
-      mergeMap((value) => this.firebaseService.add(value.valueAdd).pipe(
+      mergeMap((value) => this.firebaseService.add(value.valueAdd, value.idUser).pipe(
         map((phonebooks: any) => PhonebookActions.addPhonebookSuccess({ phonebook: phonebooks}))
       ))
     );
@@ -40,6 +40,17 @@ export class PhonebookEffects {
       ofType(PhonebookActions.updatePhonebook),
       mergeMap((value) => this.firebaseService.update(value.valueUpdate).pipe(
         map((phonebooks: any) => PhonebookActions.updatePhonebookSuccess({ phonebook: phonebooks}))
+      ))
+    );
+
+    @Effect()
+    login$ = this.actions$.pipe(
+      ofType(PhonebookActions.login),
+      mergeMap((result) => this.firebaseService.getAll().pipe(
+        tap(data => {
+         data =  data.filter( ev => ev.email === result.loginValue);
+          console.log(data);}),
+        map((users: any) => PhonebookActions.loginSuccess({ user: users.filter( ev => ev.email === result.loginValue)})),
       ))
     );
 

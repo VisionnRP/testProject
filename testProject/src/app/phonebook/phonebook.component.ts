@@ -3,8 +3,9 @@ import { FirebaseService } from '../firebase/firebase.service';
 import * as action from '../store/phonebook.actions';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import {isLoadedPhonebook} from '../store/phonebook.selectors';
-import {map} from "rxjs/operators";
+import {isLoadedPhonebook, isUser} from '../store/phonebook.selectors';
+import { Router } from '@angular/router';
+import { filter, map, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-phonebook',
@@ -14,28 +15,32 @@ import {map} from "rxjs/operators";
 export class PhonebookComponent implements OnInit {
   submitButtonBoolean;
   phonebook$: Observable<Phonebook> = this.store.pipe(select(isLoadedPhonebook));
+  user$: Observable<Phonebook> = this.store.pipe(select(isUser));
+  user: Phonebook;
 
-
-  constructor(private service: FirebaseService, private store: Store<Phonebook[]>) {
-
+  constructor(private service: FirebaseService, private store: Store<Phonebook[]>, private route: Router) {
   }
 
   ngOnInit() {
+    this.service.getUserId(this.user$, this.user);
+    this.userFromStore();
     this.store.dispatch(action.load());
+    this.phonebook$.pipe(
+    map(x => x.filter(arr => arr.phoneId === this.user[0].id))).subscribe();
   }
 
   onSubmit(e) {
     if (this.submitButtonBoolean) {
       this.update(e);
       this.submitButtonBoolean = false;
-    } else {
+    } else { 
       this.add(e);
     }
   }
 
   add(e) {
     if (this.service.form.valid) {
-      this.store.dispatch(action.addPhonebook({valueAdd: this.service.form.value}));
+      this.store.dispatch(action.addPhonebook({valueAdd: {...this.service.form.value}, idUser: {...this.user}}));
       this.service.form.reset();
     }
   }
@@ -58,4 +63,21 @@ export class PhonebookComponent implements OnInit {
   updateSpecialPhoneNumber(value: Phonebook) {
     this.store.dispatch(action.updatePhonebook({valueUpdate: {...value, isSpecial: !value.isSpecial}}));
   }
+
+  logout() {
+    this.store.dispatch(action.logout());
+    this.route.navigate(['']);
+  }
+
+  userFromStore() {
+    this.user$.subscribe(data => {
+      this.user = data;
+    });
+  }
+
+//  private checkUserLogin() {
+//     if (this.user === null) {
+//       this.route.navigate(['']);
+//     }
+//   }
 }

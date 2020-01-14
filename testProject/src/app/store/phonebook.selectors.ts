@@ -9,3 +9,8 @@ export const isLoadedPhonebook = createSelector(
   selectPhonebook,
   state => state.list
 );
+
+export const isUser = createSelector(
+  selectPhonebook,
+  state => state.user
+);
