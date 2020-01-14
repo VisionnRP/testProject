@@ -13,14 +13,14 @@ import {imgUrl } from '../image';
 })
 export class FirebaseService {
 
-  // tslint:disable-next-line:max-line-length
   constructor( private store: Store<Phonebook[]>, private firebase: AngularFirestore, public fb: FormBuilder) { }
   user$: Observable<Phonebook> = this.store.pipe(select(isUser));
-  user;
+  user: Phonebook;
   urlUserPicture = imgUrl;
+  
   collection = this.firebase.collection('phonebook');
+
   form: FormGroup = new FormGroup({
-    photo: new FormControl(imgUrl),
     email: new FormControl(),
     phone: new FormControl('', Validators.required),
     fullname: new FormControl('', Validators.required)

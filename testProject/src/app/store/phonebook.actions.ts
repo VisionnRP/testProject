@@ -1,4 +1,4 @@
-import { Action, createAction, props } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
 export const load = createAction('[Phonebook] load');
 export const loadsucces = createAction('[Phonebook] load success', props<{result: Phonebook}>());

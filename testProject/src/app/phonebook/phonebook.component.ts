@@ -16,17 +16,20 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class PhonebookComponent implements OnInit {
 
-  submitButtonBoolean;
-  phonebook$: Observable<Phonebook> = this.store.pipe(select(isLoadedPhonebook));
-  user$: Observable<Phonebook> = this.store.pipe(select(isUser));
+  submitButtonBoolean: any;
   user: Phonebook;
   phonebook;
   updateForm;
   name: any;
   animal: any;
-  
+  fileUpload: File = null;
 
-  constructor(public dialog: MatDialog, private service: FirebaseService, private store: Store<Phonebook[]>, private route: Router) {
+
+  phonebook$: Observable<Phonebook> = this.store.pipe(select(isLoadedPhonebook));
+  user$: Observable<Phonebook> = this.store.pipe(select(isUser));
+
+
+  constructor(public dialog: MatDialog, public service: FirebaseService, private store: Store<Phonebook[]>, private route: Router) {
   }
 
   ngOnInit() {
@@ -35,9 +38,7 @@ export class PhonebookComponent implements OnInit {
     this.store.dispatch(action.load());
     this.phonebook$.pipe(
     map((data: any) => {
-      if (data === null) {
-        return;
-      }
+      if (data === null) {return; }
       if (Array.isArray(data)) {
         const id = this.user[0].id;
         this.phonebook = data.filter(value => value.phoneId === id);
@@ -62,6 +63,7 @@ export class PhonebookComponent implements OnInit {
       this.service.form.reset();
     }
   }
+
   delele(value: Phonebook) {
     if (value.isSpecial) {
         const dialogRef = this.dialog.open(DialogComponent, {
@@ -94,12 +96,9 @@ export class PhonebookComponent implements OnInit {
       this.service.form.reset();
     }
   }
+
   updateSpecialPhoneNumber(value: Phonebook) {
     this.store.dispatch(action.updatePhonebook({valueUpdate: {...value, isSpecial: !value.isSpecial}}));
-  }
-  //  todo
-  updateDuplicatePhoneNumber(value: Phonebook) {
-    this.store.dispatch(action.updatePhonebook({valueUpdate: {...value, isDuplicate: true}}));
   }
 
   logout() {
@@ -133,4 +132,14 @@ export class PhonebookComponent implements OnInit {
       }
     }
   }
+
+  handleFileInput(file: FileList) {
+  this.fileUpload = file.item(0);
+  const reader = new FileReader();
+  reader.onload = (event: any) => {
+    this.service.urlUserPicture = event.target.result;
+  }
+  reader.readAsDataURL(this.fileUpload);
+  }
 }
+

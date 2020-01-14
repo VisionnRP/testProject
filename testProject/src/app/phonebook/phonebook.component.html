@@ -1,5 +1,8 @@
-<div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px">
-<div class="container" fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+<div>
+<button mat-button routerLink (click)="logout()">logout</button>
+</div>
+<div fxLayout="row" fxLayoutAlign="space-around start" fxLayoutGap="10px">
+<div class="container" fxLayoutAlign="start stretch" fxLayoutGap="10px">
 	<form [formGroup]="service.form">
 		<mat-card>
 			<mat-card-header>
@@ -7,21 +10,21 @@
 					Phonebook list
 				</mat-card-title>
 				<mat-card-subtitle>
-					You cane update your list by this form
+					You can update your list by this form
 				</mat-card-subtitle>
 			</mat-card-header>
 			<mat-card-content>
 
 				<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
 					<mat-form-field>
-						<input   formControlName="email"  matInput placeholder="email" value="">
+						<input formControlName="email"  matInput placeholder="email" value="">
           </mat-form-field>
 
           <mat-form-field>
 						<input  formControlName="phone"  matInput placeholder="phone" value="">
           </mat-form-field>
 
-           <mat-form-field >
+           <mat-form-field>
           <input  formControlName="fullname"  matInput placeholder="full name" value="">
            </mat-form-field>
         </div>
@@ -34,7 +37,8 @@
 
 <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px"  class="list-container lg"  >
   <mat-card *ngFor="let phonebook of phonebook">
-    <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" >
+    <mat-card-header fxLayout="row" fxLayoutAlign="space-between center">
+     <div mat-card-avatar class="header-image"></div>
     <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{ phonebook['fullname'] }}</mat-card-title>
       <mat-card-subtitle>{{ phonebook['phone'] }}</mat-card-subtitle>
@@ -52,5 +56,3 @@
   </mat-card>
   </div>
 </div>
-
-<button mat-button routerLink (click)="logout()">logout</button>
