@@ -39,7 +39,6 @@ export class PhonebookEffects {
     updatePhonebook$ = this.actions$.pipe(
       ofType(PhonebookActions.updatePhonebook),
       tap(x => {
-        debugger
       }),
       mergeMap((value) => this.firebaseService.update(value.valueUpdate).pipe(
         map((phonebooks: any) => PhonebookActions.updatePhonebookSuccess({ phonebook: phonebooks}))

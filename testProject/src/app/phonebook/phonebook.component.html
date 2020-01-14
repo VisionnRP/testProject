@@ -14,12 +14,13 @@
 
 				<div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
 					<mat-form-field>
-						<input  formControlName="email"  matInput placeholder="email" value="">
+						<input   formControlName="email"  matInput placeholder="email" value="">
           </mat-form-field>
 
           <mat-form-field>
 						<input  formControlName="phone"  matInput placeholder="phone" value="">
           </mat-form-field>
+
            <mat-form-field >
           <input  formControlName="fullname"  matInput placeholder="full name" value="">
            </mat-form-field>
@@ -34,11 +35,13 @@
 <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px"  class="list-container lg"  >
   <mat-card *ngFor="let phonebook of phonebook">
     <mat-card-header fxLayout="row" fxLayoutAlign="space-between center" >
+    <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{ phonebook['fullname'] }}</mat-card-title>
       <mat-card-subtitle>{{ phonebook['phone'] }}</mat-card-subtitle>
       {{phonebook['email']}}
       <div>
         <mat-icon *ngIf="phonebook['isSpecial']" class="mat-icon-settings">enhanced_encryption</mat-icon>
+        <mat-icon *ngIf="phonebook['isDuplicate']" class="mat-icon-settings">collections</mat-icon>
       </div>
     </mat-card-header>
       <mat-card-actions>
@@ -50,4 +53,4 @@
   </div>
 </div>
 
-<button (click)="logout()">logout</button>
+<button mat-button routerLink (click)="logout()">logout</button>

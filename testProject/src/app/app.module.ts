@@ -26,6 +26,8 @@ import {counterReducer, phonebookReducer} from '../app/store/phonebook.reducer';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -41,11 +43,13 @@ const appRoutes: Routes = [
     AppComponent,
     PhonebookComponent,
     LoginComponent,
+    DialogComponent,
   ],
   imports: [
     RouterModule.forRoot(
       appRoutes),
     AppRoutingModule,
+    MatDialogModule,
     MatSnackBarModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -71,6 +75,6 @@ const appRoutes: Routes = [
   ],
   exports: [RouterModule],
   providers: [FirebaseService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, DialogComponent]
 })
 export class AppModule { }

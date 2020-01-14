@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import {FormGroup, FormControl, Validators, FormGroupName, FormBuilder} from '@angular/forms';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Injectable, ChangeDetectorRef } from '@angular/core';
+import {FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { map, filter } from 'rxjs/operators';
 import { isUser } from '../store/phonebook.selectors';
+import {imgUrl } from '../image';
 
 
 
@@ -14,12 +13,14 @@ import { isUser } from '../store/phonebook.selectors';
 })
 export class FirebaseService {
 
-  constructor(private store: Store<Phonebook[]>, private firebase: AngularFirestore, public fb: FormBuilder) { }
+  // tslint:disable-next-line:max-line-length
+  constructor( private store: Store<Phonebook[]>, private firebase: AngularFirestore, public fb: FormBuilder) { }
   user$: Observable<Phonebook> = this.store.pipe(select(isUser));
   user;
-
+  urlUserPicture = imgUrl;
   collection = this.firebase.collection('phonebook');
   form: FormGroup = new FormGroup({
+    photo: new FormControl(imgUrl),
     email: new FormControl(),
     phone: new FormControl('', Validators.required),
     fullname: new FormControl('', Validators.required)
@@ -32,11 +33,10 @@ export class FirebaseService {
   }
 
   add(value: Phonebook, a): Observable<any> {
+    this.user$.subscribe(data => this.user = data);
+    console.log(this.user);
     const stringForIdentifier = this.randomString();
-    this.user$.subscribe(
-      data => {
-        this.collection.doc(stringForIdentifier).set({...value, id: stringForIdentifier, phoneId: data[0].id });
-      });
+    this.collection.doc(stringForIdentifier).set({...value, id: stringForIdentifier, phoneId: this.user[0].id});
     return  this.collection.valueChanges();
   }
 
@@ -59,3 +59,6 @@ export class FirebaseService {
   }
 
 }
+
+
+
